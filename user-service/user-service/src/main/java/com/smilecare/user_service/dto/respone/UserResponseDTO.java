@@ -1,4 +1,4 @@
-package com.smilecare.user_service.dto;
+package com.smilecare.user_service.dto.respone;
 
 import lombok.Data;
 

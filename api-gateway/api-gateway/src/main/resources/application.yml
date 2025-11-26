@@ -7,23 +7,51 @@ spring:
   cloud:
     gateway:
       routes:
-        # --- CH CHO BOOKING ---
+        # --- ROUTE CHO BOOKING ---
         - id: booking-service
           uri: lb://booking-service
           predicates:
             - Path=/api/bookings/**
 
-        # --- CH CHO PAYMENT ---
+        # --- ROUTE CHO PAYMENT ---
         - id: payment-service
-          # Tu tim thang ten là payment-service
           uri: lb://payment-service
           predicates:
             - Path=/api/payments/**
+
+        # --- ROUTE CHO USER ---
         - id: user-service
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
-# ch ket noi BROKER (EUREKA)
+
+        # --- ROUTE CHO CATALOG (Nếu có) ---
+        - id: catalog-service
+          uri: lb://catalog-service
+          predicates:
+            - Path=/api/catalog/**
+
+        # --- ROUTE CHO DOCTOR (Nếu có) ---
+        - id: doctor-service
+          uri: lb://doctor-service
+          predicates:
+            - Path=/api/doctors/**
+            - Path=/api/schedules/**
+
+      # --- CẤU HÌNH CORS (QUAN TRỌNG CHO FRONTEND) ---
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"   # <-- ĐÃ SỬA: Cho phép mọi nguồn (Web/App) gọi vào
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"   # <-- ĐÃ SỬA: Cho phép mọi header
+
+# CẤU HÌNH KẾT NỐI EUREKA (BROKER)
 eureka:
   client:
     serviceUrl:

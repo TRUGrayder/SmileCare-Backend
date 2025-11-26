@@ -1,7 +1,8 @@
 package com.smilecare.user_service.service;
 
-import com.smilecare.user_service.dto.UserRequestDTO;
-import com.smilecare.user_service.dto.UserResponseDTO;
+import com.smilecare.user_service.dto.request.LoginRequest;
+import com.smilecare.user_service.dto.request.UserRequestDTO;
+import com.smilecare.user_service.dto.respone.UserResponseDTO;
 import com.smilecare.user_service.entity.Role;
 import com.smilecare.user_service.entity.User;
 import com.smilecare.user_service.repository.RoleRepository;
@@ -15,8 +16,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private RoleRepository roleRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     // Lấy tất cả User (Chuyển sang DTO)
     public List<UserResponseDTO> getAllUsers() {
@@ -64,5 +67,15 @@ public class UserService {
                 user.getAddress(),
                 user.getRole() != null ? user.getRole().getNameRole() : "Unknown"
         );
+    }
+
+    public Boolean checkLogin(LoginRequest request) {
+        var user = userRepository.findByUserName(request.getUserName())
+                .orElseThrow(() -> new RuntimeException("Thông tin đăng nhập không đúng!"));
+        if(user.getUserName().equals(request.getUserName()) && user.getPassword().equals(request.getPassword())) {
+            return true;
+        }
+
+        return false;
     }
 }
